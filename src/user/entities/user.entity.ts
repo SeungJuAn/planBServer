@@ -1,15 +1,18 @@
-import { Column, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class User {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column()
+  @Column('nvarchar', { length: 50 })
   userId: string;
 
-  @Column()
+  @Column('nvarchar', { length: 20 })
   name: string;
+
+  @Column('nvarchar', { length: 20 })
   email: string;
 
-  @Column()
+  @Column('nvarchar', { length: 50 })
   password: string;
 }

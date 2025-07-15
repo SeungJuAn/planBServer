@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,19 +20,31 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  /**
+   *
+   * @param id 고유 id
+   * @param updateUserDto {name : string; email : string}
+   * @returns true or false
+   */
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const result = await this.userRepository.update(
+      { id: id },
+      { ...updateUserDto },
+    );
+    return result.affected ? true : false;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findUser(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new UnauthorizedException(
+        '해당 id를 가진 사용자는 존재하지않습니다.',
+      );
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const result = await this.userRepository.delete({ id: id });
+    return result.affected ? true : false;
   }
 }
