@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Plan } from 'src/plan/entities/plan.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,4 +22,7 @@ export class User {
 
   @Column('nvarchar', { length: 50 })
   password: string;
+
+  @OneToMany(() => Plan, (plan) => plan.planMaster)
+  plans: Plan[];
 }
